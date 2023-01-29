@@ -25,14 +25,16 @@ import static java.util.Arrays.*;
 @Component
 public class JWTTokenProvider {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret}") //get values from app.yml
     private String secret;
 
     public String generateJwtToken(UserPrincipal userPrincipal) {
         String[] claims = getClaimsFromUser(userPrincipal);
         return JWT.create().withIssuer(GET_ARRAYS_LLC).withAudience(GET_ARRAYS_ADMINISTRATION)
-                .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
-                .withArrayClaim(AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withIssuedAt(new Date())
+                .withSubject(userPrincipal.getUsername())
+                .withArrayClaim(AUTHORITIES, claims)
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
 
